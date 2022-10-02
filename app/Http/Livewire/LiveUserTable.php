@@ -17,7 +17,8 @@ class LiveUserTable extends Component
     public $orden = null;
     public $icon = "-circle";
     public $user_role;
-    // public $showModal = 'hidden';
+
+    protected $listeners = ['userListUpdate' => 'render'];
 
     // Permite mantener filtros cuando la página se recarga
     protected $queryString = [
@@ -99,6 +100,10 @@ class LiveUserTable extends Component
 
     public function showModal(User $user)
     {
-        $this->emit("showModal", $user);
+        if ($user->name) {
+            $this->emit("showModal", $user);
+        } else {
+            $this->emit("showModalNewUser");
+        }
     }
 }
