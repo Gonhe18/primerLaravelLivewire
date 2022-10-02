@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Apellido;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -15,6 +16,8 @@ class LiveUserTable extends Component
     public $campo = null;
     public $orden = null;
     public $icon = "-circle";
+    public $user_role;
+    // public $showModal = 'hidden';
 
     // Permite mantener filtros cuando la página se recarga
     protected $queryString = [
@@ -25,11 +28,16 @@ class LiveUserTable extends Component
 
     public function render()
     {
-        $users = User::where('name', 'like', "%{$this->search}%")
-            ->orWhere('email', 'like', "%{$this->search}%");
+        $users = User::termino($this->search)
+            ->role($this->user_role);
         // Permite un orden dinámico
         if ($this->campo && $this->orden) {
-            $users = $users->orderBy($this->campo, $this->orden);
+            if ($this->campo === "apellido") {
+                $users = $users->orderBy(Apellido::select('apellido')
+                    ->whereColumn('apellidos.user_id', 'users.id'), $this->orden);
+            } else {
+                $users = $users->orderBy($this->campo, $this->orden);
+            }
         } else {
             $this->campo = null;
             $this->orden = null;
@@ -50,12 +58,7 @@ class LiveUserTable extends Component
     // Resetea todos los filtros
     public function clear()
     {
-        $this->resetPage();
-        $this->campo = null;
-        $this->orden = null;
-        $this->icon = "-circle";
-        $this->search = "";
-        $this->perPage = 5;
+        $this->reset();
     }
 
     // Resetea paginación para busquedas desde search
@@ -92,5 +95,10 @@ class LiveUserTable extends Component
             return "-circle";
         }
         return $sort == 'asc' ? "-circle-arrow-up" : "-circle-arrow-down";
+    }
+
+    public function showModal(User $user)
+    {
+        $this->emit("showModal", $user);
     }
 }

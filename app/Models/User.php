@@ -27,6 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -58,4 +59,40 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    // Setea los roles para que figuren correctamente para el usuario
+    public function getRolAttribute()
+    {
+        if ($this->role == 'admin') {
+            return "Administrador";
+        }
+        return $this->role == "vendedor" ? "Vendedor" : "Cliente";
+    }
+
+    public function r_lastname()
+    {
+        return $this->hasOne(Apellido::class, 'user_id', 'id');
+    }
+
+    // Permite buscar por clave foranea
+    public function scopeTermino($query, $termino)
+    {
+        if ($termino == "") {
+            return;
+        }
+        return $query->where('name', 'like', "%{$termino}%")
+            ->orWhere('email', 'like', "%{$termino}%")
+            ->orWhereHas('r_lastname', function ($query2) use ($termino) {
+                $query2->where('apellido', 'like', "%{$termino}%");
+            });
+    }
+
+    // Permite filtrar por rol
+    public function scopeRole($query, $role)
+    {
+        if ($role == "") {
+            return;
+        }
+        return $query->whereRole($role);
+    }
 }

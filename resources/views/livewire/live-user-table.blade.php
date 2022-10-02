@@ -3,8 +3,8 @@
       <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
          <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
             <div class="overflow-hidden shadow border-b border-gray-200 sm:rounded-lg">
-               <div class="bg-white px-4 py-3 items-center justify-between border-t border-gray-200 sm:px-6">
-                  <div class="flex text-gray-500 ">
+               <div class="bg-white px-4 py-3 items-center justify-between border-t border-gray-200 ">
+                  <div class="flex text-gray-500">
                      <select
                         class="form-select appearance-none block w-16 px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         wire:model="perPage">
@@ -14,9 +14,17 @@
                         <option value="20">20</option>
                      </select>
                      <input type="text"
-                        class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none ml-6"
+                        class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none mx-2"
                         placeholder="Ingrese el término de búsqueda" wire:model="search">
-                     <button wire:click="clear" class="ml-6">
+                     <select
+                        class="form-select appearance-none block w-48 px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                        wire:model="user_role">
+                        <option value="">Seleccione</option>
+                        <option value="admin">Administrador</option>
+                        <option value="vendedor">Vendedor</option>
+                        <option value="cliente">Cliente</option>
+                     </select>
+                     <button wire:click="clear" class="ml-2">
                         <span class="fa fa-eraser"></span>
                      </button>
                   </div>
@@ -34,9 +42,16 @@
                         </th>
                         <th scope="col"
                            class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                           Name
+                           Nombre
                            <button wire:click="sortable('name')">
                               <span class="fa-solid fa{{$campo === 'name' ? $icon : '-circle'}}"></span>
+                           </button>
+                        </th>
+                        <th scope="col"
+                           class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                           Apellido
+                           <button wire:click="sortable('apellido')">
+                              <span class="fa-solid fa{{$campo === 'apellido' ? $icon : '-circle'}}"></span>
                            </button>
                         </th>
                         <th scope="col"
@@ -64,13 +79,17 @@
                            {{ $user->name }}
                         </td>
                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                           {{ $user->r_lastname->apellido }}
+                        </td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                            {{ $user->email }}
                         </td>
                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                           Admin
+                           {{ $user->rol }}
                         </td>
                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                           Edit
+                           <a href="javascript:void(0)" class="text-indigo-600 hover:text-indigo-900"
+                              wire:click="showModal({{ $user->id }})">Editar</a>
                         </td>
                      </tr>
                      @endforeach
