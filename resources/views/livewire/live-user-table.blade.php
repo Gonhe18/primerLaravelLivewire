@@ -55,6 +55,10 @@
                         </th>
                         <th scope="col"
                            class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                           Imagen
+                        </th>
+                        <th scope="col"
+                           class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                            Nombre
                            <button wire:click="sortable('name')">
                               <span class="fa-solid fa{{$campo === 'name' ? $icon : '-circle'}}"></span>
@@ -88,6 +92,10 @@
                      @foreach ($users as $user )
                      <tr class="border-b">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $user->id }}</td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap w-10 h-10">
+                           <img class="rounded-full" src="{{asset( 'storage/'.$user->image_user) }}"
+                              alt="Imagen perfil">
+                        </td>
                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                            {{ $user->name }}
                         </td>
@@ -103,6 +111,9 @@
                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                            <a href="javascript:void(0)" class="text-indigo-600 hover:text-indigo-900"
                               wire:click="showModal({{ $user->id }})">Editar</a>
+
+                           <a href="javascript:void(0)" class="text-red-600 hover:text-red-900"
+                              onclick="borrarUsuario('{{ $user->id }}')">Eliminar</a>
                         </td>
                      </tr>
                      @endforeach
@@ -115,4 +126,19 @@
          </div>
       </div>
    </div>
+   @push('scripts')
+   <script>
+   function borrarUsuario(user) {
+      if (confirm("Esta seguro de querer borrar el usuario?")) {
+         Livewire.emit('deleteUsuario', user)
+      } else {
+         alert('Usario no eliminado');
+      }
+   }
+
+   Livewire.on('deleteUser', (user) => {
+      alert(`El usuario ${user.name} se elimino correctamete`)
+   });
+   </script>
+   @endpush
 </div>

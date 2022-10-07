@@ -18,7 +18,10 @@ class LiveUserTable extends Component
     public $icon = "-circle";
     public $user_role;
 
-    protected $listeners = ['userListUpdate' => 'render'];
+    protected $listeners = [
+        'userListUpdate' => 'render',
+        'deleteUsuario' => 'deleteUser'
+    ];
 
     // Permite mantener filtros cuando la página se recarga
     protected $queryString = [
@@ -105,5 +108,11 @@ class LiveUserTable extends Component
         } else {
             $this->emit("showModalNewUser");
         }
+    }
+    public function deleteUser(User $user)
+    {
+        $user->r_lastname()->delete();
+        $user->delete();
+        $this->emit("deleteUser", $user);
     }
 }

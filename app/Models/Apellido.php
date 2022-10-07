@@ -13,4 +13,9 @@ class Apellido extends Model
         'apellido',
         'user_id'
     ];
+
+    public function r_user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

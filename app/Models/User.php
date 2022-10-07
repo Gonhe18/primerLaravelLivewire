@@ -27,7 +27,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'profile_photo_path'
     ];
 
     /**
@@ -59,6 +60,11 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function getImageUserAttribute()
+    {
+        return $this->profile_photo_path ?? 'img/default_user.png';
+    }
 
     // Setea los roles para que figuren correctamente para el usuario
     public function getRolAttribute()

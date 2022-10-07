@@ -18,6 +18,23 @@
                      :options="['admin'=> 'Administrador','cliente'=> 'Cliente','vendedor'=> 'Vendedor']">
                   </x-component-input-select>
                </div>
+               <div class="flex">
+                  <x-component-input :label="'Imagen'" :placeholder="'Ingrese su imagen'" :name="'profile_photo_path'"
+                     :type="'file'">
+                  </x-component-input>
+               </div>
+
+               @if ($action == "Registrar")
+               <div class="flex">
+                  <x-component-input :label="'Contraseña'" :placeholder="'Ingrese su contraseña'" :name="'password'"
+                     type="password">
+                  </x-component-input>
+                  <x-component-input :label="'Confirmar contraseña'" :placeholder="'Confirme su contraseña'"
+                     :name="'password_confirmation'" type="password">
+                  </x-component-input>
+               </div>
+
+               @endif
                </p>
             </div>
          </div>
